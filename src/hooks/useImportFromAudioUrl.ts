@@ -74,6 +74,7 @@ function useImportFromAudioUrl(): void {
     const artist = readTrimmed(params, "artist") ?? undefined;
     const album = readTrimmed(params, "album") ?? undefined;
     const durationSec = parseDurationSec(readTrimmed(params, "duration"));
+    const lyrics = readTrimmed(params, "lyrics");
 
     let cancelled = false;
 
@@ -108,10 +109,11 @@ function useImportFromAudioUrl(): void {
           useProjectStore.getState().setMetadata(meta as any);
         }
 
-        // Open the lyrics import modal pre-filled with track info
+        // Open the lyrics import modal pre-filled with track info and optional lyrics text
         useImportModalStore.getState().open({
           prefill: { track: title, artist, album, durationSec },
           section: "paste",
+          body: lyrics ?? undefined,
         });
 
         toast.success(`Loaded audio: ${fileName}`);
