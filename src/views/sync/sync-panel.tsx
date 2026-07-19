@@ -522,12 +522,14 @@ const SyncPanel: React.FC = () => {
 
       {/* Bottom panel */}
       <div className="px-4 lg:px-6 py-3 lg:py-4 border-t border-composer-border bg-composer-bg-dark">
-        <div className="flex items-center justify-between h-12 lg:h-14">
-          <TimingDisplay lastSyncedTime={lastSyncedTime} />
+        <div className="flex items-center justify-center lg:justify-between h-12 lg:h-14">
+          <div className="hidden lg:block">
+            <TimingDisplay lastSyncedTime={lastSyncedTime} />
+          </div>
 
           {!isComplete && isPlaying && (
             <div className="flex items-center gap-4">
-              {currentWord && <span className="text-lg md:text-xl font-medium text-composer-text">{currentWord}</span>}
+              {currentWord && <span className="hidden lg:inline text-lg md:text-xl font-medium text-composer-text">{currentWord}</span>}
               <div className="flex items-center gap-2">
                 <m.div
                   variants={syncPulseVariants}
@@ -600,7 +602,7 @@ const SyncPanel: React.FC = () => {
           )}
 
           {!isComplete && !isPlaying && syncState.isActive && (
-            <div className="text-sm text-composer-text-muted">Paused ・ Click a line to jump, or play to continue</div>
+            <div className="hidden lg:block text-sm text-composer-text-muted">Paused ・ Click a line to jump, or play to continue</div>
           )}
         </div>
       </div>
