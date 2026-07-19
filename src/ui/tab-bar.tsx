@@ -18,7 +18,10 @@ const TabBar: React.FC = () => {
   const showHints = useSettingsStore((s) => s.showShortcutHints);
 
   return (
-    <nav data-tour="tab-bar" className="flex border-b border-composer-border select-none">
+    <nav
+      data-tour="tab-bar"
+      className="flex overflow-x-auto border-b border-composer-border select-none scrollbar-none"
+    >
       {TABS.map((tab, index) => {
         const isActive = activeTab === tab.id;
         return (
@@ -27,7 +30,7 @@ const TabBar: React.FC = () => {
             type="button"
             data-tour={`tab-${tab.id}`}
             onClick={() => setActiveTab(tab.id)}
-            className={`cursor-pointer px-4 py-3 text-sm font-medium transition-colors ${
+            className={`shrink-0 cursor-pointer px-3 py-3 text-sm font-medium transition-colors ${
               isActive
                 ? "border-b-2 border-composer-accent text-composer-text"
                 : "text-composer-text-muted hover:text-composer-text-secondary"

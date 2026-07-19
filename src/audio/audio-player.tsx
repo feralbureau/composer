@@ -148,7 +148,7 @@ const AudioPlayer: React.FC = () => {
   if (!source) return null;
 
   return (
-    <div className="flex items-center gap-4 p-4 border-t select-none border-composer-border bg-composer-bg-dark">
+    <div className="flex items-center gap-2 lg:gap-4 p-2 lg:p-4 border-t select-none border-composer-border bg-composer-bg-dark">
       <PlayButton isPlaying={isPlaying} onClick={() => setIsPlaying(!isPlaying)} />
       <Slider
         value={currentTime}

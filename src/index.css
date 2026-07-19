@@ -61,12 +61,15 @@ html {
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--color-composer-bg);
   color: var(--color-composer-text);
   font-family: var(--font-family-sans);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Text selection */
@@ -89,6 +92,36 @@ body {
 
 @utility overflow-anchor-none {
   overflow-anchor: none;
+}
+
+/* dvh-safe: fallback for browsers that don't support 100dvh */
+@utility h-dvh-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Min height variant */
+@utility min-h-dvh-safe {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Prevent zoom on mobile — inputs under 16px trigger iOS zoom */
+@media (pointer: coarse) and (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Hide scrollbar but keep scrollability */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility snap-onset-line {

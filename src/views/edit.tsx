@@ -692,7 +692,7 @@ const EditPanel: React.FC = () => {
 
       <AgentManager />
 
-      <div className="flex flex-1 min-h-0 gap-4">
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0 gap-4">
         {/* Input */}
         <div className="flex flex-col flex-1 min-w-0">
           <label htmlFor={textareaId} className="mb-2 text-sm font-medium select-none text-composer-text-secondary">

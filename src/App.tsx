@@ -88,7 +88,7 @@ const AppContent: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen bg-composer-bg text-composer-text">
+    <div className="flex flex-col h-dvh-safe bg-composer-bg text-composer-text">
       <AppHeader
         onSettingsOpen={() => openSettings()}
         onHelpOpen={() => setHelpOpen(true)}

@@ -378,7 +378,7 @@ const SyncPanel: React.FC = () => {
   return (
     <div data-tour="sync-panel" className="flex flex-col flex-1 overflow-hidden select-none">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-composer-border">
+      <div className="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b border-composer-border">
         <div className="flex items-baseline gap-3">
           <h2 className="text-lg font-medium">Sync</h2>
           <span className="font-mono text-sm text-composer-text-muted tabular-nums">{progressText}</span>
@@ -484,7 +484,7 @@ const SyncPanel: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center flex-1 px-8 py-12">
+        <div className="flex flex-col items-center justify-center flex-1 px-4 md:px-8 py-8 md:py-12">
           {isComplete ? (
             <div className="text-center">
               {/* react-doctor-disable-next-line react-doctor/no-gradient-text */}
@@ -521,20 +521,20 @@ const SyncPanel: React.FC = () => {
       )}
 
       {/* Bottom panel */}
-      <div className="px-6 py-4 border-t border-composer-border bg-composer-bg-dark">
-        <div className="flex items-center justify-between h-14">
+      <div className="px-4 lg:px-6 py-3 lg:py-4 border-t border-composer-border bg-composer-bg-dark">
+        <div className="flex items-center justify-between h-12 lg:h-14">
           <TimingDisplay lastSyncedTime={lastSyncedTime} />
 
           {!isComplete && isPlaying && (
             <div className="flex items-center gap-4">
-              {currentWord && <span className="text-xl font-medium text-composer-text">{currentWord}</span>}
+              {currentWord && <span className="text-lg md:text-xl font-medium text-composer-text">{currentWord}</span>}
               <div className="flex items-center gap-2">
                 <m.div
                   variants={syncPulseVariants}
                   initial={false}
                   animate={isHolding ? "pulse" : "idle"}
                   transition={syncCarouselTransition}
-                  className={`flex items-center justify-center border-2 rounded-full size-14 cursor-pointer select-none touch-action-manipulation ${
+                  className={`flex items-center justify-center border-2 rounded-full size-12 md:size-14 cursor-pointer select-none touch-action-manipulation ${
                     isHolding ? "bg-composer-accent/20 border-composer-accent" : "bg-composer-bg-elevated"
                   }`}
                   onPointerDown={(e) => {
@@ -577,7 +577,7 @@ const SyncPanel: React.FC = () => {
                   initial={false}
                   animate={showPulse ? "pulse" : "idle"}
                   transition={syncCarouselTransition}
-                  className="flex items-center justify-center border-2 rounded-full size-14 bg-composer-bg-elevated cursor-pointer select-none"
+                  className="flex items-center justify-center border-2 rounded-full size-12 md:size-14 bg-composer-bg-elevated cursor-pointer select-none"
                   onClick={() => {
                     if (editMode) return;
                     if (isHolding && isPlaying) {

@@ -124,7 +124,7 @@ const ExportPanel: React.FC = () => {
   return (
     <div data-tour="export-panel" className="flex flex-col flex-1 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-composer-border">
+      <div className="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b border-composer-border">
         <div className="flex items-baseline gap-3">
           <h2 className="text-lg font-medium">Export</h2>
           <span className="text-sm text-composer-text-muted">
@@ -155,7 +155,7 @@ const ExportPanel: React.FC = () => {
       </div>
 
       {/* Project management */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-composer-border bg-composer-bg-elevated/50">
+      <div className="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-composer-border bg-composer-bg-elevated/50">
         <span className="text-sm text-composer-text-muted">Project</span>
         <div className="flex items-center gap-2">
           {projectFileInput}
