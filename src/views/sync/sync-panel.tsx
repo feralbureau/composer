@@ -534,9 +534,37 @@ const SyncPanel: React.FC = () => {
                   initial={false}
                   animate={isHolding ? "pulse" : "idle"}
                   transition={syncCarouselTransition}
-                  className={`flex items-center justify-center border-2 rounded-full size-14 ${
+                  className={`flex items-center justify-center border-2 rounded-full size-14 cursor-pointer select-none touch-action-manipulation ${
                     isHolding ? "bg-composer-accent/20 border-composer-accent" : "bg-composer-bg-elevated"
                   }`}
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    if (editMode) return;
+                    if (!syncState.isActive && lines.length > 0) {
+                      handleStartSync();
+                      handleHoldStart();
+                      setIsHolding(true);
+                    } else if (isPlaying) {
+                      handleHoldStart();
+                      setIsHolding(true);
+                    }
+                  }}
+                  onPointerUp={(e) => {
+                    e.preventDefault();
+                    if (isHolding) {
+                      triggerRippleAtCurrentPosition();
+                      handleHoldEnd();
+                      setIsHolding(false);
+                    }
+                  }}
+                  onPointerLeave={(e) => {
+                    e.preventDefault();
+                    if (isHolding) {
+                      triggerRippleAtCurrentPosition();
+                      handleHoldEnd();
+                      setIsHolding(false);
+                    }
+                  }}
                 >
                   <span className="text-xs font-medium text-composer-text-muted">
                     {getEffectiveKeysArray("sync.holdSync")
@@ -549,7 +577,17 @@ const SyncPanel: React.FC = () => {
                   initial={false}
                   animate={showPulse ? "pulse" : "idle"}
                   transition={syncCarouselTransition}
-                  className="flex items-center justify-center border-2 rounded-full size-14 bg-composer-bg-elevated"
+                  className="flex items-center justify-center border-2 rounded-full size-14 bg-composer-bg-elevated cursor-pointer select-none"
+                  onClick={() => {
+                    if (editMode) return;
+                    if (isHolding && isPlaying) {
+                      handleHoldTap();
+                    } else if (!syncState.isActive && lines.length > 0) {
+                      handleStartSync();
+                    } else if (isPlaying) {
+                      handleTap();
+                    }
+                  }}
                 >
                   <span className="text-xs font-medium text-composer-text-muted">
                     {getEffectiveKeysArray("sync.tap")
