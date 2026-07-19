@@ -1,6 +1,7 @@
 import { useProjectFileActions } from "@/hooks/useProjectFileActions";
 import { useAudioStore } from "@/stores/audio";
 import { useProjectStore } from "@/stores/project";
+import { useComposerReturnStore } from "@/stores/composer-return-store";
 import { Button } from "@/ui/button";
 import { EmptyState } from "@/ui/empty-state";
 import { Scroll } from "@/ui/scroll";
@@ -15,6 +16,7 @@ import {
   IconRefresh,
   IconTrash,
   IconUpload,
+  IconArrowUp,
 } from "@tabler/icons-react";
 import { Highlight, themes } from "prism-react-renderer";
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -32,8 +34,14 @@ const ExportPanel: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [editState, setEditState] = useState<{ source: string; content: string } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { handleExportProject, handleImportProject, handleClearProject } = useProjectFileActions(fileInputRef);
+
+  const returnApi = useComposerReturnStore((s) => s.returnApi);
+  const armor = useComposerReturnStore((s) => s.armor);
 
   const syncedLineCount = useMemo(() => lines.filter((line) => effectiveBounds(line) !== null).length, [lines]);
   const hasSyncedContent = syncedLineCount > 0;
@@ -84,6 +92,36 @@ const ExportPanel: React.FC = () => {
     setEditState(null);
     setIsEditing(false);
   }, []);
+
+  const handleSendToLiner = useCallback(async () => {
+    if (!returnApi || !exportContent || !metadata.artist || !metadata.title) return;
+    setSending(true);
+    setSendError(null);
+    setSent(false);
+    try {
+      const url = armor ? `${returnApi}?armor=${encodeURIComponent(armor)}` : returnApi;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          artist: metadata.artist,
+          title: metadata.title,
+          ttml: exportContent,
+        }),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => res.statusText);
+        throw new Error(text);
+      }
+      setSent(true);
+      setTimeout(() => setSent(false), 3000);
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "unknown error");
+      setTimeout(() => setSendError(null), 5000);
+    } finally {
+      setSending(false);
+    }
+  }, [returnApi, armor, exportContent, metadata.artist, metadata.title]);
 
   const projectFileInput = (
     <input
@@ -151,6 +189,17 @@ const ExportPanel: React.FC = () => {
             <IconDownload className="size-4" />
             Download TTML
           </Button>
+          {returnApi && (
+            <Button hasIcon variant="secondary" onClick={handleSendToLiner} disabled={sending || sent}>
+              {sent ? <IconCheck className="size-4" /> : <IconArrowUp className="size-4" />}
+              {sending ? "Sending…" : sent ? "Sent!" : "Send to Liner"}
+            </Button>
+          )}
+          {sendError && (
+            <span className="text-xs text-red-500 max-w-40 truncate" title={sendError}>
+              {sendError}
+            </span>
+          )}
         </div>
       </div>
 

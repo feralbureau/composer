@@ -4,11 +4,12 @@ import { getPersistenceSettled } from "@/lib/persistence-settled";
 import { useAudioStore } from "@/stores/audio";
 import { useProjectStore } from "@/stores/project";
 import { useImportModalStore } from "@/stores/import-modal-store";
+import { useComposerReturnStore } from "@/stores/composer-return-store";
 import { stripQueryParams } from "@/utils/url-params";
 
 // -- Constants ----------------------------------------------------------------
 
-const AUDIO_PARAM_NAMES = ["audioUrl", "title", "artist", "album", "duration", "lyrics"] as const;
+const AUDIO_PARAM_NAMES = ["audioUrl", "title", "artist", "album", "duration", "lyrics", "returnApi", "armor"] as const;
 const LOG_PREFIX = "[Boot]";
 
 // -- Helpers -------------------------------------------------------------------
@@ -75,6 +76,8 @@ function useImportFromAudioUrl(): void {
     const album = readTrimmed(params, "album") ?? undefined;
     const durationSec = parseDurationSec(readTrimmed(params, "duration"));
     const lyrics = readTrimmed(params, "lyrics");
+    const returnApi = readTrimmed(params, "returnApi");
+    const armor = readTrimmed(params, "armor");
 
     let cancelled = false;
 
@@ -107,6 +110,11 @@ function useImportFromAudioUrl(): void {
         if (durationSec !== undefined) meta.duration = durationSec;
         if (Object.keys(meta).length > 0) {
           useProjectStore.getState().setMetadata(meta as any);
+        }
+
+        // Store return config for "Send to Liner" button in export panel
+        if (returnApi) {
+          useComposerReturnStore.getState().setReturnConfig({ returnApi, armor: armor ?? undefined });
         }
 
         // Open the lyrics import modal pre-filled with track info and optional lyrics text
